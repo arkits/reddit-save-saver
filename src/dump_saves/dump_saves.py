@@ -49,11 +49,16 @@ def main():
 
                 db_user_collection = rssDb[profile["username"]]
 
-                saved_posts = redditor.saved(limit=10)
+                saved_posts = redditor.saved(limit=1000)
 
                 saved_post_list = []
 
                 for saved_post in saved_posts:
+
+                    try:
+                        author = saved_post.author.name
+                    except Exception as e:
+                        author = "undefined"
 
                     parsed_post = {
                         "title": saved_post.title,
@@ -61,7 +66,7 @@ def main():
                         "ups": saved_post.ups,
                         "subreddit": saved_post.subreddit_name_prefixed,
                         "created_utc": saved_post.created_utc,
-                        "author": saved_post.author.name,
+                        "author": author,
                         "id": saved_post.id
                     }
 
