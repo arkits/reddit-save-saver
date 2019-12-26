@@ -10,6 +10,9 @@ cd ..
 # Enable venv
 source .env/bin/activate
 
+# Install requirements
+pip install -r requirements.txt
+
 # Go to dump_saves dir
 cd src/dump_saves
 
