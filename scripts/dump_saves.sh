@@ -5,7 +5,7 @@
 set -e
 
 # Go to root
-cd ..
+cd $RSS_HOME
 
 # Enable venv
 source .env/bin/activate
