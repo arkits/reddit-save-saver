@@ -4,8 +4,8 @@
 # Stop if there is an error
 set -e
 
-# Go to root
-cd $RSS_HOME
+# Go to rss home
+cd /opt/software/reddit-save-saver
 
 # Enable venv
 source .env/bin/activate
