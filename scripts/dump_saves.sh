@@ -6,15 +6,15 @@ set -e
 
 # Go to rss home
 cd /opt/software/reddit-save-saver
+pwd
 
-# Enable venv
-source .env/bin/activate
+python3 --version
 
 # Install requirements
-pip install -r requirements.txt
+pip3 install -r requirements.txt   
 
 # Go to dump_saves dir
 cd src/dump_saves
 
 # Run it!
-python dump_saves.py
+python3 dump_saves.py
