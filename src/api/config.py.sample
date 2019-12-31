@@ -1,0 +1,7 @@
+from werkzeug.security import generate_password_hash, check_password_hash
+
+users = {
+    "arkits": generate_password_hash("hunter2")
+}
+
+MONGODB_URI = "mongodb+srv://admin:password@myfree.mongodb.net/test?retryWrites=true&w=majority"
