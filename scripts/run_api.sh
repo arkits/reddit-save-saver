@@ -3,7 +3,7 @@
 
 cd /opt/software/reddit-save-saver
 
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 cd /opt/software/reddit-save-saver/src/api
 nohup flask run > /dev/null 2>&1 & 
