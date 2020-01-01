@@ -99,6 +99,7 @@ function PostCard({ post }) {
                 <Grid container spacing={0}>
                     <Grid item xs={9}>
                         <CardActionArea
+                            target="_blank"
                             href={"https://reddit.com" + post.permalink}
                         >
                             <CardContent className={classes.content}>
