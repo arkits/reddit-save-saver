@@ -7,6 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -21,14 +22,30 @@ const useStyles = makeStyles(theme => ({
 const axios = require("axios");
 
 function SavedPosts({ creds }) {
-    const [data, setData] = React.useState([]);
+
+    const [posts, setPosts] = React.useState([]);
+
+    const [skip, setSkip] = React.useState(0);
+
+    function addPosts(newPosts) {
+
+        const postsToSet = posts;
+
+        newPosts.forEach(post => {
+            postsToSet.push(post)
+        });
+        
+        console.log("Setting Posts - ", postsToSet)
+        setPosts([]) // inconsistency in re-rendering the updated component
+        setPosts(postsToSet)
+    }
 
     React.useEffect(() => {
         if (creds.username !== "") {
-            console.log("creds has changed -", creds);
+            console.log("In useEffect -", creds);
             const fetchData = async () => {
                 const result = await axios(
-                    "https://archit.xyz/rss/api/saves?skip=0&limit=10",
+                    "https://archit.xyz/rss/api/saves?skip=" + skip + "&limit=10",
                     {
                         headers: {
                             Authorization:
@@ -37,17 +54,23 @@ function SavedPosts({ creds }) {
                         }
                     }
                 );
-                setData(result.data.saved_posts);
+
+                addPosts(result.data.saved_posts);
             };
             fetchData();
         }
-    }, [creds]);
+    }, [creds, skip]);
 
     return (
         <div>
-            {data.map((post, key) => (
+            {posts.map((post, key) => (
                 <PostCard post={post} key={post.id} />
             ))}
+            <center>
+                <Button variant="contained" onClick={() => setSkip(skip + 10)}>
+                    Load more
+                </Button>
+            </center>
         </div>
     );
 }
@@ -75,6 +98,7 @@ function PostCard({ post }) {
                                 color="textSecondary"
                             >
                                 {post.subreddit} | { new Date(post.created_utc * 1000).toDateString() }
+                                {post.thumbnail}
                             </Typography>
                         </CardContent>
                         </CardActionArea>
