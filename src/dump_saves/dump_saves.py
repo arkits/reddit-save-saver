@@ -46,7 +46,7 @@ def main():
 
                 db_user_collection = rssDb[profile["username"]]
 
-                saved_posts = redditor.saved(limit=1)
+                saved_posts = redditor.saved(limit=1000)
 
                 saved_post_list = []
 
