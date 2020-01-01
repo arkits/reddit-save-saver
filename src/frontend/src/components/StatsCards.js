@@ -6,19 +6,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
-    card: {
-        minWidth: 275
-    },
-    bullet: {
-        display: "inline-block",
-        margin: "0 2px",
-        transform: "scale(0.8)"
-    },
     title: {
         fontSize: 14
-    },
-    pos: {
-        marginBottom: 12
     }
 });
 
@@ -27,7 +16,7 @@ function StatsCards({ data }) {
     const classes = useStyles();
 
     return (
-        <Grid container spacing={3}>
+        <Grid container spacing={1}>
             <Grid item xs={6}>
                 <Card className={classes.card}>
                     <CardContent>

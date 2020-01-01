@@ -1,12 +1,12 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import StatsCards from "./StatsCards";
+import SavedPosts from "./SavedPosts";
 
 import "axios";
 const axios = require("axios");
 
 function PageContent({ creds }) {
-    
     const [data, setData] = React.useState({});
 
     React.useEffect(() => {
@@ -20,7 +20,6 @@ function PageContent({ creds }) {
                             btoa(creds.username + ":" + creds.password)
                     }
                 });
-                console.log(result);
                 setData(result.data);
             };
             fetchData();
@@ -42,6 +41,8 @@ function PageContent({ creds }) {
         return (
             <div>
                 <StatsCards data={data} />
+                <br />
+                <SavedPosts creds={creds} />
             </div>
         );
     }
