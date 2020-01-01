@@ -56,7 +56,6 @@ function LoginDialog({ setCreds }) {
                         />
 
                         <TextField
-                            autoFocus
                             margin="dense"
                             id="password"
                             label="Password"
