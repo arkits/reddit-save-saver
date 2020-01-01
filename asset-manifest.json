@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/reddit-save-saver/static/js/main.a24e13d1.chunk.js",
-    "main.js.map": "/reddit-save-saver/static/js/main.a24e13d1.chunk.js.map",
+    "main.js": "/reddit-save-saver/static/js/main.644d6e25.chunk.js",
+    "main.js.map": "/reddit-save-saver/static/js/main.644d6e25.chunk.js.map",
     "runtime-main.js": "/reddit-save-saver/static/js/runtime-main.b7961885.js",
     "runtime-main.js.map": "/reddit-save-saver/static/js/runtime-main.b7961885.js.map",
     "static/js/2.ca55ebc4.chunk.js": "/reddit-save-saver/static/js/2.ca55ebc4.chunk.js",
     "static/js/2.ca55ebc4.chunk.js.map": "/reddit-save-saver/static/js/2.ca55ebc4.chunk.js.map",
     "index.html": "/reddit-save-saver/index.html",
-    "precache-manifest.4f068474f41df7d73571bac0c58eca41.js": "/reddit-save-saver/precache-manifest.4f068474f41df7d73571bac0c58eca41.js",
+    "precache-manifest.0ef1d41dcd793b8d7864a8d6779d8c6e.js": "/reddit-save-saver/precache-manifest.0ef1d41dcd793b8d7864a8d6779d8c6e.js",
     "service-worker.js": "/reddit-save-saver/service-worker.js",
     "static/js/2.ca55ebc4.chunk.js.LICENSE": "/reddit-save-saver/static/js/2.ca55ebc4.chunk.js.LICENSE"
   },
   "entrypoints": [
     "static/js/runtime-main.b7961885.js",
     "static/js/2.ca55ebc4.chunk.js",
-    "static/js/main.a24e13d1.chunk.js"
+    "static/js/main.644d6e25.chunk.js"
   ]
 }
