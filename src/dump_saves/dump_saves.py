@@ -8,7 +8,6 @@ import praw
 import config
 from loguru import logger
 import pymongo
-import pyfiglet
 import traceback
 
 
@@ -22,9 +21,6 @@ rssDb = dbClient['reddit_save_saver']
 
 
 def main():
-
-    ascii_banner = pyfiglet.figlet_format("rss!")
-    print(ascii_banner)
 
     for profile_name in creds:
 
@@ -60,6 +56,11 @@ def main():
                     except Exception as e:
                         author = "undefined"
 
+                    try:
+                        thumbnail = saved_post.thumbnail
+                    except Exception as e:
+                        thumbnail = None
+
                     parsed_post = {
                         "title": saved_post.title,
                         "permalink": saved_post.permalink,
@@ -67,7 +68,8 @@ def main():
                         "subreddit": saved_post.subreddit_name_prefixed,
                         "created_utc": saved_post.created_utc,
                         "author": author,
-                        "id": saved_post.id
+                        "id": saved_post.id,
+                        "thumbnail": thumbnail
                     }
 
                     if db_user_collection.find_one({"id": parsed_post["id"]}) is None:
