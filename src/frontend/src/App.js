@@ -1,20 +1,19 @@
 import React from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
-import NavBar from "./components/NavBar";
-import { Box } from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import "axios";
+import Box from "@material-ui/core/Box";
 
-const axios = require("axios");
+import NavBar from "./components/NavBar";
+import PageContent from "./components/PageContent"
+import Copyright from "./components/Copyright"
+
+import { useLocalStorage } from "./util/storage";
 
 function App() {
     const classes = useStyles();
 
-    const [creds, setCreds] = React.useState({
+    const [creds, setCreds] = useLocalStorage('creds', {
         username: "",
         password: ""
     });
@@ -33,86 +32,6 @@ function App() {
                     <Copyright />
                 </Container>
             </footer>
-        </div>
-    );
-}
-
-function PageContent({ creds }) {
-
-	const [data, setData] = React.useState({});
-
-	React.useEffect(() => {
-		if(creds.username !== ""){
-			console.log("creds has changed -", creds);
-			const fetchData = async () => {
-                const result = await axios("https://archit.xyz/rss/api/debug", {
-                    headers: {
-                        Authorization: "Basic " + btoa(creds.username + ":" + creds.password)
-                    }
-                });
-                console.log(result);
-                setData(result.data);
-            };
-            fetchData();
-		}
-	  }, [creds]);
-
-    if (creds.username === "") {
-        return (
-            <div>
-                <Typography variant="h2" component="h1" gutterBottom>
-                    Namaskar Mandali
-                </Typography>
-                <Typography variant="h5" component="h2" gutterBottom>
-                    {"You are not currently logged in."}
-                </Typography>
-            </div>
-        );
-    } else {
-        return (
-            <div>
-                <Typography variant="h5" component="h2" gutterBottom>
-                    {"You are currently logged in."} <br />
-					{JSON.stringify(data, null, 2)}
-                </Typography>
-            </div>
-        );
-    }
-}
-
-function Copyright() {
-    const [data, setData] = React.useState({});
-
-    React.useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios("https://archit.xyz/rss/api");
-            setData(result.data);
-        };
-        fetchData();
-    }, []);
-
-    return (
-        <div>
-            <Grid container spacing={3}>
-                <Grid item xs={6}>
-                    <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        align="center"
-                    >
-                        <Link color="inherit" href="https://arkits.github.io/">
-                            arkits.github.io
-                        </Link>
-                        {" // "}
-                        <Link color="inherit" href="https://archit.xyz/">
-                            archit.xyz
-                        </Link>
-                    </Typography>
-                </Grid>
-                <Grid item xs={6} align="right">
-                    {data.name}/{data.version}
-                </Grid>
-            </Grid>
         </div>
     );
 }
