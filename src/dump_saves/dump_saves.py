@@ -9,6 +9,7 @@ import config
 from loguru import logger
 import pymongo
 import traceback
+import time
 
 
 # Reddit Creds
@@ -45,7 +46,7 @@ def main():
 
                 db_user_collection = rssDb[profile["username"]]
 
-                saved_posts = redditor.saved(limit=1000)
+                saved_posts = redditor.saved(limit=1)
 
                 saved_post_list = []
 
@@ -86,11 +87,29 @@ def main():
                         "Number of saved posts collected - {}", len(saved_post_list))
                     db_user_collection.insert_many(saved_post_list)
 
+                save_dump_timestamp()
+
                 logger.info("✅ {} - Save Procedure Complete!", redditor)
 
         except Exception as e:
             logger.error("⚠️  Caught Exception - {}", e)
             traceback.print_exc()
+
+
+def save_dump_timestamp():
+
+    db_meta_collection = rssDb["db_meta"]
+
+    dump_timestamp = {
+        "key" : "last_dump",
+        "value" : int(time.time())
+    }
+
+    if_key_exists = {"key": "last_dump"}
+    update_doc = {"$set": dump_timestamp}
+    result = db_meta_collection.update_one(if_key_exists, update_doc, upsert=True)
+
+    logger.info("dump_timestamp={}", dump_timestamp)
 
 
 if __name__ == '__main__':
