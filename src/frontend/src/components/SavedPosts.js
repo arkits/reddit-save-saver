@@ -4,10 +4,11 @@ import "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import { Button } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -22,30 +23,33 @@ const useStyles = makeStyles(theme => ({
 const axios = require("axios");
 
 function SavedPosts({ creds }) {
-
     const [posts, setPosts] = React.useState([]);
 
     const [skip, setSkip] = React.useState(0);
 
-    function addPosts(newPosts) {
+    const [isLoading, setIsLoading] = React.useState(true);
 
+    function addPosts(newPosts) {
         const postsToSet = posts;
 
         newPosts.forEach(post => {
-            postsToSet.push(post)
+            postsToSet.push(post);
         });
-        
-        console.log("Setting Posts - ", postsToSet)
-        setPosts([]) // inconsistency in re-rendering the updated component
-        setPosts(postsToSet)
+
+        console.log("Setting Posts - ", postsToSet);
+        setPosts([]); // inconsistency in re-rendering the updated component
+        setPosts(postsToSet);
     }
 
     React.useEffect(() => {
         if (creds.username !== "") {
             console.log("In useEffect -", creds);
+            setIsLoading(true);
             const fetchData = async () => {
                 const result = await axios(
-                    "https://archit.xyz/rss/api/saves?skip=" + skip + "&limit=10",
+                    "https://archit.xyz/rss/api/saves?skip=" +
+                        skip +
+                        "&limit=10",
                     {
                         headers: {
                             Authorization:
@@ -56,23 +60,35 @@ function SavedPosts({ creds }) {
                 );
 
                 addPosts(result.data.saved_posts);
+                setIsLoading(false);
             };
             fetchData();
         }
     }, [creds, skip]);
 
-    return (
-        <div>
-            {posts.map((post, key) => (
-                <PostCard post={post} key={post.id} />
-            ))}
+    if (isLoading) {
+        return (
             <center>
-                <Button variant="contained" onClick={() => setSkip(skip + 10)}>
-                    Load more
-                </Button>
+                <CircularProgress color="secondary" />
             </center>
-        </div>
-    );
+        );
+    } else {
+        return (
+            <div>
+                {posts.map((post, key) => (
+                    <PostCard post={post} key={post.id} />
+                ))}
+                <center>
+                    <Button
+                        variant="contained"
+                        onClick={() => setSkip(skip + 10)}
+                    >
+                        Load more
+                    </Button>
+                </center>
+            </div>
+        );
+    }
 }
 
 function PostCard({ post }) {
@@ -82,25 +98,29 @@ function PostCard({ post }) {
             <Card className={classes.card}>
                 <Grid container spacing={0}>
                     <Grid item xs={9}>
-                    <CardActionArea href={ "https://reddit.com" + post.permalink }>
-                        <CardContent className={classes.content}>
-                            <Typography component="h6" variant="h6">
-                                {post.title}
-                            </Typography>
-                            <Typography
-                                variant="subtitle1"
-                                color="textSecondary"
-                            >
-                                {post.author}
-                            </Typography>
-                            <Typography
-                                variant="subtitle2"
-                                color="textSecondary"
-                            >
-                                {post.subreddit} | { new Date(post.created_utc * 1000).toDateString() }
-                                
-                            </Typography>
-                        </CardContent>
+                        <CardActionArea
+                            href={"https://reddit.com" + post.permalink}
+                        >
+                            <CardContent className={classes.content}>
+                                <Typography component="h6" variant="h6">
+                                    {post.title}
+                                </Typography>
+                                <Typography
+                                    variant="subtitle1"
+                                    color="textSecondary"
+                                >
+                                    {post.author}
+                                </Typography>
+                                <Typography
+                                    variant="subtitle2"
+                                    color="textSecondary"
+                                >
+                                    {post.subreddit} |{" "}
+                                    {new Date(
+                                        post.created_utc * 1000
+                                    ).toDateString()}
+                                </Typography>
+                            </CardContent>
                         </CardActionArea>
                     </Grid>
                     <Grid align="right" item xs={3}>

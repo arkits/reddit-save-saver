@@ -2,12 +2,15 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import StatsCards from "./StatsCards";
 import SavedPosts from "./SavedPosts";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import "axios";
 const axios = require("axios");
 
 function PageContent({ creds }) {
     const [data, setData] = React.useState({});
+
+    const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
         if (creds.username !== "") {
@@ -21,6 +24,7 @@ function PageContent({ creds }) {
                     }
                 });
                 setData(result.data);
+                setIsLoading(false);
             };
             fetchData();
         }
@@ -38,13 +42,21 @@ function PageContent({ creds }) {
             </div>
         );
     } else {
-        return (
-            <div>
-                <StatsCards data={data} />
-                <br />
-                <SavedPosts creds={creds} />
-            </div>
-        );
+        if (isLoading) {
+            return (
+                <div>
+                    <LinearProgress color="secondary" />
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <StatsCards data={data} />
+                    <br />
+                    <SavedPosts creds={creds} />
+                </div>
+            );
+        }
     }
 }
 
