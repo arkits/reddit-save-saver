@@ -29,6 +29,11 @@ def get_saves(username, request_data):
 
         parsed_post = {}
 
+        try:
+            thumbnail = post["thumbnail"]
+        except Exception as e:
+            thumbnail = "self"
+
         parsed_post["title"] = post["title"]
         parsed_post["permalink"] = post["permalink"]
         parsed_post["ups"] = post["ups"]
@@ -36,7 +41,7 @@ def get_saves(username, request_data):
         parsed_post["subreddit"] = post["subreddit"]
         parsed_post["created_utc"] = post["created_utc"]
         parsed_post["id"] = post["id"]
-        parsed_post["thumbnail"] = post["thumbnail"]
+        parsed_post["thumbnail"] = thumbnail
 
         to_return["saved_posts"].append(parsed_post)
 
