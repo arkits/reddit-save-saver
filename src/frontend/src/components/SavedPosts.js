@@ -98,7 +98,7 @@ function PostCard({ post }) {
                                 color="textSecondary"
                             >
                                 {post.subreddit} | { new Date(post.created_utc * 1000).toDateString() }
-                                {post.thumbnail}
+                                
                             </Typography>
                         </CardContent>
                         </CardActionArea>
@@ -107,7 +107,7 @@ function PostCard({ post }) {
                         <Avatar
                             variant="square"
                             className={classes.large}
-                            src="https://images.unsplash.com/photo-1577493184543-921d0391b9ff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80"
+                            src={post.thumbnail}
                         ></Avatar>
                     </Grid>
                 </Grid>
