@@ -18,16 +18,14 @@ const useStyles = makeStyles({
 });
 
 function StatsCards({ data }) {
-    const [anchorEl, setAnchorEl] = React.useState(null);
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
     const handlePopoverOpen = event => {
         setAnchorEl(event.currentTarget);
     };
-
     const handlePopoverClose = () => {
         setAnchorEl(null);
     };
-
     const open = Boolean(anchorEl);
 
     const classes = useStyles();
@@ -106,7 +104,11 @@ function StatsCards({ data }) {
                     onClose={handlePopoverClose}
                     disableRestoreFocus
                 >
-                    <Typography>{moment(data.last_dump * 1000).format("dddd, MMMM Do YYYY, h:mm:ss a")}</Typography>
+                    <Typography>
+                        {moment(data.last_dump * 1000).format(
+                            "dddd, MMMM Do YYYY, h:mm:ss a"
+                        )}
+                    </Typography>
                 </Popover>
             </Grid>
         </Grid>
