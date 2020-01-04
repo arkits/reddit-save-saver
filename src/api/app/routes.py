@@ -23,6 +23,13 @@ auth = auth.auth
 def version_handler():
     return jsonify(version.get_version())
 
+
+@app.route('/api/debug', methods=['GET'])
+@auth.login_required
+def get_debug():
+    return jsonify(debug.get_debug(auth.username()))
+
+
 @app.route('/api/saves', methods=['GET'])
 @auth.login_required
 def get_saves():
@@ -35,7 +42,12 @@ def get_saves():
     return response
 
 
-@app.route('/api/debug', methods=['GET'])
+@app.route('/api/saves/random', methods=['GET'])
 @auth.login_required
-def get_debug():
-    return jsonify(debug.get_debug(auth.username()))
+def get_random_saves():
+    response = jsonify(
+        saves.get_random_saves(
+            auth.username(),
+        )
+    )
+    return response
