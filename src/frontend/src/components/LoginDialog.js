@@ -44,18 +44,20 @@ function LoginDialog({ setCreds }) {
                 <DialogContent>
                     <form onSubmit={handleSubmit}>
                         <TextField
+                            variant="outlined"
                             autoFocus
                             margin="dense"
                             id="username"
                             label="Username"
-                            className="input"
                             type="text"
                             fullWidth
                             value={p_user}
+                            className="input"
                             onChange={e => setUsername(e.target.value)}
                         />
 
                         <TextField
+                            variant="outlined"
                             margin="dense"
                             id="password"
                             label="Password"

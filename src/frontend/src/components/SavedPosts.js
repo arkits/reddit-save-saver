@@ -1,25 +1,11 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import "axios";
-import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar";
 import { Button } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
-const useStyles = makeStyles(theme => ({
-    card: {
-        display: "flex"
-    },
-    large: {
-        width: "100%",
-        height: "100%"
-    }
-}));
-
+import PostCard from "./PostCard";
+import Typography from "@material-ui/core/Typography";
+import "axios";
 const axios = require("axios");
 
 function SavedPosts({ creds }) {
@@ -29,42 +15,61 @@ function SavedPosts({ creds }) {
 
     const [isLoading, setIsLoading] = React.useState(true);
 
+    const [apiUrl] = React.useState("https://archit.xyz/rss/api/saves");
+
+    const [apiError, setApiError] = React.useState("");
+
     function addPosts(newPosts) {
-        const postsToSet = posts;
-
-        newPosts.forEach(post => {
-            postsToSet.push(post);
-        });
-
-        console.log("Setting Posts - ", postsToSet);
-        setPosts([]); // inconsistency in re-rendering the updated component
-        setPosts(postsToSet);
+        // TODO: Implement adding new posts to old posts
+        setPosts(newPosts);
     }
 
     React.useEffect(() => {
         if (creds.username !== "") {
-            console.log("In useEffect -", creds);
-            setIsLoading(true);
-            const fetchData = async () => {
-                const result = await axios(
-                    "https://archit.xyz/rss/api/saves?skip=" +
-                        skip +
-                        "&limit=10",
-                    {
-                        headers: {
-                            Authorization:
-                                "Basic " +
-                                btoa(creds.username + ":" + creds.password)
-                        }
-                    }
-                );
-
-                addPosts(result.data.saved_posts);
-                setIsLoading(false);
-            };
-            fetchData();
+            fetchPosts();
         }
     }, [creds, skip]);
+
+    const fetchPosts = async () => {
+        console.log("In fetchPosts - ", creds);
+        setIsLoading(true);
+        try {
+            const result = await axios(apiUrl + "?skip=" + skip + "&limit=10", {
+                headers: {
+                    Authorization:
+                        "Basic " + btoa(creds.username + ":" + creds.password)
+                }
+            });
+            console.log("Setting posts - ", result.data.saved_posts);
+            addPosts(result.data.saved_posts);
+            setIsLoading(false);
+        } catch (error) {
+            console.log("Caught Error - ", error);
+            setIsLoading(false);
+            setApiError(error.message);
+        }
+    };
+
+    const fetchRandomPosts = async () => {
+        console.log("In fetchRandomPosts - ", creds);
+        var randomApiUrl = "https://archit.xyz/rss/api/saves/random";
+        setIsLoading(true);
+        try {
+            const result = await axios(randomApiUrl, {
+                headers: {
+                    Authorization:
+                        "Basic " + btoa(creds.username + ":" + creds.password)
+                }
+            });
+            console.log("Setting random posts - ", result.data.saved_posts);
+            setPosts(result.data.saved_posts);
+            setIsLoading(false);
+        } catch (error) {
+            console.log("Caught Error - ", error);
+            setIsLoading(false);
+            setApiError(error.message);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -73,69 +78,62 @@ function SavedPosts({ creds }) {
             </center>
         );
     } else {
-        return (
-            <div>
-                {posts.map((post, key) => (
-                    <PostCard post={post} key={post.id} />
-                ))}
-                <center>
-                    <Button
-                        variant="contained"
-                        onClick={() => setSkip(skip + 10)}
-                    >
-                        Load more
-                    </Button>
-                </center>
-            </div>
-        );
-    }
-}
-
-function PostCard({ post }) {
-    const classes = useStyles();
-    return (
-        <div>
-            <Card className={classes.card}>
-                <Grid container spacing={0}>
-                    <Grid item xs={9}>
-                        <CardActionArea
-                            target="_blank"
-                            href={"https://reddit.com" + post.permalink}
+        if (apiError) {
+            return (
+                <div>
+                    <Card>
+                        <CardContent>
+                            <div align="center">
+                                <Typography color="textSecondary" gutterBottom>
+                                    Whoops!
+                                </Typography>
+                                <Typography variant="h5" component="h2">
+                                    {apiError}
+                                </Typography>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <Card>
+                        <CardContent>
+                            <div align="center">
+                                <Button
+                                    variant="contained"
+                                    onClick={() => {
+                                        fetchPosts(true);
+                                    }}
+                                >
+                                    Latest
+                                </Button>{" "}
+                                <Button
+                                    variant="contained"
+                                    onClick={fetchRandomPosts}
+                                >
+                                    Random
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <br />
+                    {posts.map((post, key) => (
+                        <PostCard post={post} key={post.id} />
+                    ))}
+                    <center>
+                        <Button
+                            variant="contained"
+                            onClick={() => setSkip(skip + 10)}
                         >
-                            <CardContent className={classes.content}>
-                                <Typography component="h6" variant="h6">
-                                    {post.title}
-                                </Typography>
-                                <Typography
-                                    variant="subtitle1"
-                                    color="textSecondary"
-                                >
-                                    {post.author}
-                                </Typography>
-                                <Typography
-                                    variant="subtitle2"
-                                    color="textSecondary"
-                                >
-                                    {post.subreddit} |{" "}
-                                    {new Date(
-                                        post.created_utc * 1000
-                                    ).toDateString()}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                    </Grid>
-                    <Grid align="right" item xs={3}>
-                        <Avatar
-                            variant="square"
-                            className={classes.large}
-                            src={post.thumbnail}
-                        ></Avatar>
-                    </Grid>
-                </Grid>
-            </Card>
-            <br />
-        </div>
-    );
+                            Load more
+                        </Button>
+                    </center>
+                </div>
+            );
+        }
+    }
 }
 
 export default SavedPosts;
