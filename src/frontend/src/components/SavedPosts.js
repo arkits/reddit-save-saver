@@ -5,6 +5,8 @@ import { Button } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PostCard from "./PostCard";
 import Typography from "@material-ui/core/Typography";
+import ErrorCard from "./ErrorCard";
+
 import "axios";
 const axios = require("axios");
 
@@ -81,18 +83,7 @@ function SavedPosts({ creds }) {
         if (apiError) {
             return (
                 <div>
-                    <Card>
-                        <CardContent>
-                            <div align="center">
-                                <Typography color="textSecondary" gutterBottom>
-                                    Whoops!
-                                </Typography>
-                                <Typography variant="h5" component="h2">
-                                    {apiError}
-                                </Typography>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <ErrorCard apiError={apiError} />
                 </div>
             );
         } else {

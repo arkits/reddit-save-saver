@@ -3,6 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import StatsCards from "./StatsCards";
 import SavedPosts from "./SavedPosts";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import ErrorCard from "./ErrorCard";
 
 import "axios";
 const axios = require("axios");
@@ -62,9 +63,7 @@ function PageContent({ creds }) {
             if (apiError !== "") {
                 return (
                     <div>
-                        <Typography variant="h5" component="h2" gutterBottom>
-                            {apiError}!
-                        </Typography>
+                        <ErrorCard apiError={apiError} />
                     </div>
                 );
             } else {
