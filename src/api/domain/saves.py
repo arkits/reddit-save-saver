@@ -57,6 +57,31 @@ def get_random_saves(username):
     return to_return
 
 
+# Entry-point to /api/saves/search
+def get_search_saves(username, request_data):
+
+    logger.info("Received get_search_saves for username={} / request_data={}",
+                username, request_data)
+
+    query = str(request_data["q"])
+    search_string = str(request_data["s"])
+
+    logger.info("query={} search_string={}", query, search_string)
+
+    to_return = {
+        "username": username,
+        "saved_posts": []
+    }
+
+    db_user_collection = rssDb[username]
+
+    # MongoDB query
+    posts = db_user_collection.find({query: {'$regex': search_string}})
+
+    to_return["saved_posts"] = generate_saved_posts(posts)
+
+    return to_return
+
 def select_random_posts(posts):
 
     limit = 20

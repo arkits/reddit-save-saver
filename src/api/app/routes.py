@@ -51,3 +51,15 @@ def get_random_saves():
         )
     )
     return response
+
+
+@app.route('/api/saves/search', methods=['GET'])
+@auth.login_required
+def get_search_saves():
+    response = jsonify(
+        saves.get_search_saves(
+            auth.username(),
+            request.args
+        )
+    )
+    return response
