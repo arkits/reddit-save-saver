@@ -7,7 +7,7 @@ Flask==1.1.1
 Flask-HTTPAuth==3.3.0
 idna==2.8
 itsdangerous==1.1.0
-Jinja2==2.10.3
+Jinja2==2.11.3
 loguru==0.4.0
 MarkupSafe==1.1.1
 praw==6.4.0
